@@ -61,7 +61,7 @@ def execute_main_logic(message: Message, update_requred=False):
     )
     results = response.split('\n')
     result = '\n\n'.join(results)
-    message.reply_text(result)
+    message.reply_text(result, quote=False)
 
 
 def handle_callback(update: Update, context: CallbackContext):
