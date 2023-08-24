@@ -48,11 +48,13 @@ def handle_callback(update: Update, context: CallbackContext):
     if data == '1':
         update.callback_query.message.edit_text('Делаем запрос...\nОжидание ~ 5 сек.')
         response = go_1c()
-        update.callback_query.message.edit_text(response)
+        update.callback_query.message.delete()
+        update.callback_query.message.reply_text(response)
     elif data == '2':
         update.callback_query.message.edit_text('Делаем запрос...\nОжидание ~ 60 сек.')
         response = go_1c(update=True)
-        update.callback_query.message.edit_text(response)
+        update.callback_query.message.delete()
+        update.callback_query.message.reply_text(response)
     elif data == '3':
         update.callback_query.message.delete()
 
