@@ -1,4 +1,5 @@
 import os
+from time import perf_counter
 
 from dotenv import load_dotenv
 from telegram import Update, InlineKeyboardMarkup, InlineKeyboardButton
@@ -46,15 +47,31 @@ def handle_callback(update: Update, context: CallbackContext):
     data = update.callback_query.data
     update.callback_query.answer()
     if data == '1':
-        update.callback_query.message.edit_text('Делаем запрос...\nОжидание ~ 5 сек.')
+        update.callback_query.message.edit_text(
+            'Делаем запрос...\nОжидание ~ 5 сек.'
+        )
+        start = perf_counter()
         response = go_1c()
-        update.callback_query.message.delete()
-        update.callback_query.message.reply_text(response)
+        finish = perf_counter()
+        update.callback_query.message.edit_text(
+            f'Запрос занял {int(finish - start)} с.\nСпасибо за ожидание 🙂'
+        )
+        results = response.split('\n')
+        result = '\n\n'.join(results)
+        update.callback_query.message.reply_text(result)
     elif data == '2':
-        update.callback_query.message.edit_text('Делаем запрос...\nОжидание ~ 60 сек.')
+        update.callback_query.message.edit_text(
+            'Делаем запрос...\nОжидание ~ 60 сек.'
+        )
+        start = perf_counter()
         response = go_1c(update=True)
-        update.callback_query.message.delete()
-        update.callback_query.message.reply_text(response)
+        finish = perf_counter()
+        update.callback_query.message.edit_text(
+            f'Запрос занял {int(finish - start)} с.\nСпасибо за ожидание 🙂'
+        )
+        results = response.split('\n')
+        result = '\n\n'.join(results)
+        update.callback_query.message.reply_text(result)
     elif data == '3':
         update.callback_query.message.delete()
 
