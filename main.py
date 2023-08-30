@@ -45,7 +45,7 @@ def go_1c(update):
     else:
         params = {}
     response = requests.get(url, params, auth=(login, password))
-    return response.text
+    return str(response.json())
 
 
 def execute_main_logic(message: Message, update_requred=False):
