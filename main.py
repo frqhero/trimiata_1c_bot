@@ -46,7 +46,7 @@ def go_1c(update):
     else:
         params = {}
     response = requests.get(url, params, auth=(login, password))
-    return json.dumps(response.json(), indent=2, ensure_ascii=False)
+    return json.dumps(response.json(), indent=1, ensure_ascii=False)
 
 
 def execute_main_logic(message: Message, update_requred=False):
