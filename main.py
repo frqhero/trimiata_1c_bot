@@ -1,4 +1,3 @@
-import json
 import os
 from time import perf_counter
 
@@ -46,7 +45,7 @@ def go_1c(update):
     else:
         params = {}
     response = requests.get(url, params, auth=(login, password))
-    return json.dumps(response.json(), indent=1, ensure_ascii=False)
+    return str(response.json())
 
 
 def execute_main_logic(message: Message, update_requred=False):
@@ -60,9 +59,7 @@ def execute_main_logic(message: Message, update_requred=False):
     message.edit_text(
         f'Запрос занял {int(finish - start)} сек.\nСпасибо за ожидание 🙂'
     )
-    results = response.split('\n')
-    result = '\n\n'.join(results)
-    message.reply_text(result, quote=False)
+    message.reply_text(response, quote=False)
 
 
 def handle_callback(update: Update, context: CallbackContext):
