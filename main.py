@@ -1,3 +1,4 @@
+import json
 import os
 from time import perf_counter
 
@@ -45,7 +46,7 @@ def go_1c(update):
     else:
         params = {}
     response = requests.get(url, params, auth=(login, password))
-    return str(response.json())
+    return json.dumps(response.json(), indent=2, ensure_ascii=False)
 
 
 def execute_main_logic(message: Message, update_requred=False):
