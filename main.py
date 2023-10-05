@@ -74,6 +74,30 @@ def handle_callback(update: Update, context: CallbackContext):
         update.callback_query.message.delete()
 
 
+def stock_data_equivalence(update: Update, context: CallbackContext):
+    message = update.message
+    temp_message = message.reply_text(f'Делаем запрос...\nОжидание > 10 сек.')
+    start = perf_counter()
+    response = go_1c(False)
+    finish = perf_counter()
+    temp_message.edit_text(
+        f'Запрос занял {int(finish - start)} сек.\nСпасибо за ожидание 🙂'
+    )
+    temp_message.reply_text(response, quote=False)
+
+
+def stock_data_equivalence_update(update: Update, context: CallbackContext):
+    message = update.message
+    temp_message = message.reply_text(f'Делаем запрос...\nОжидание > 60 сек.')
+    start = perf_counter()
+    response = go_1c(True)
+    finish = perf_counter()
+    temp_message.edit_text(
+        f'Запрос занял {int(finish - start)} сек.\nСпасибо за ожидание 🙂'
+    )
+    temp_message.reply_text(response, quote=False)
+
+
 def main():
     telegram_token = os.getenv('TELEGRAM_TOKEN')
     updater = Updater(telegram_token)
@@ -82,6 +106,17 @@ def main():
     dispatcher.add_handler(CommandHandler('bot', start))
     dispatcher.add_handler(
         CallbackQueryHandler(handle_callback, pattern='^\d$')
+    )
+
+    dispatcher.add_handler(
+        CommandHandler(
+            'stock_data_equivalence', stock_data_equivalence
+        )
+    )
+    dispatcher.add_handler(
+        CommandHandler(
+            'stock_data_equivalence_update', stock_data_equivalence_update
+        )
     )
 
     updater.start_polling()
