@@ -111,8 +111,12 @@ def rename_photos(update: Update, context: CallbackContext):
                 result['wrong_barcodes'], 'wrong_barcodes.txt'
             )
     else:
-
-        return
+        update.message.reply_text(
+            'The renaming operation was successfully completed.\n'
+            f'It took {result["renaming_duration"]} seconds.\n'
+            f'Before the operation, the destination folder contained {result["photo_number_before"]} files, '
+            f'and it has {result["photo_number_after"]} files afterward.'
+        )
 
 
 def main():
