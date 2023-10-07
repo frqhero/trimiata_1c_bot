@@ -7,4 +7,5 @@ run pip install -r requirements.txt
 copy main.py main.py
 copy photo_renaming.py photo_renaming.py
 
-cmd python3 main.py
+# cmd python3 main.py
+cmd sleep infinity
