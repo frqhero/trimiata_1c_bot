@@ -17,7 +17,7 @@ from telegram.ext import (
 )
 import requests
 
-load_dotenv()
+from photo_renaming import main as photo_renaming
 
 
 def start(update: Update, context: CallbackContext) -> None:
@@ -98,7 +98,26 @@ def stock_data_equivalence_update(update: Update, context: CallbackContext):
     temp_message.reply_text(response, quote=False)
 
 
+def rename_photos(update: Update, context: CallbackContext):
+    result = photo_renaming()
+    if result['exception']:
+        update.message.reply_text(result['exception'])
+        if result['wrong_names']:
+            update.message.reply_document(
+                result['wrong_names'], 'wrong_names.txt'
+            )
+        if result['wrong_barcodes']:
+            update.message.reply_document(
+                result['wrong_barcodes'], 'wrong_barcodes.txt'
+            )
+    else:
+
+        return
+
+
 def main():
+    load_dotenv()
+
     telegram_token = os.getenv('TELEGRAM_TOKEN')
     updater = Updater(telegram_token)
     dispatcher = updater.dispatcher
@@ -109,15 +128,14 @@ def main():
     )
 
     dispatcher.add_handler(
-        CommandHandler(
-            'stock_data_equivalence', stock_data_equivalence
-        )
+        CommandHandler('stock_data_equivalence', stock_data_equivalence)
     )
     dispatcher.add_handler(
         CommandHandler(
             'stock_data_equivalence_update', stock_data_equivalence_update
         )
     )
+    dispatcher.add_handler(CommandHandler('rename_photos', rename_photos))
 
     updater.start_polling()
     updater.idle()
