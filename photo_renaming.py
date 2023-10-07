@@ -60,6 +60,7 @@ def make_request(files_table):
     url = os.getenv('PHOTO_RENAMING_URL')
     user = os.getenv('1C_LOGIN')
     password = os.getenv('1C_PASSWORD')
+    print(url, user, password, sep='\n')
     data = {'series': list(unique_series)}
     response = requests.post(url, json=data, auth=(user, password))
     response.raise_for_status()
