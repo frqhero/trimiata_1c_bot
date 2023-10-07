@@ -13,4 +13,4 @@
 
 ## docker
 * `docker build -t trim_bot:0 .`
-* `docker run -d --name trim_bot --restart=always -v /mnt/PHOTO_SOURCES:/mnt/PHOTO_SOURCES trim_bot:0`
+* `docker run -d --name trim_bot --restart=always --env-file .env -v /mnt/PHOTO_SOURCES:/mnt/PHOTO_SOURCES trim_bot:0`
