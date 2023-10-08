@@ -1,11 +1,10 @@
-from python:3.11.5-slim
+FROM python:3.11.5-slim
 
-workdir /code
+WORKDIR /code
 
-copy requirements.txt requirements.txt
-run pip install -r requirements.txt
-copy main.py main.py
-copy photo_renaming.py photo_renaming.py
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+COPY main.py main.py
+COPY photo_renaming.py photo_renaming.py
 
-# cmd python3 main.py
-cmd sleep infinity
+CMD python main.py
