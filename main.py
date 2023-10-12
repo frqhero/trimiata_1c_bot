@@ -18,6 +18,7 @@ from telegram.ext import (
 import requests
 
 from photo_renaming import main as photo_renaming
+from find_photos_with_same_article import main as find_photos_with_same_article
 
 
 def start(update: Update, context: CallbackContext) -> None:
@@ -119,6 +120,15 @@ def rename_photos(update: Update, context: CallbackContext):
         )
 
 
+def handler_find_photos_with_same_article(
+    update: Update, context: CallbackContext
+):
+    result = find_photos_with_same_article()
+    update.message.reply_document(
+        result['bytes'], 'find_photos_with_same_article.yaml'
+    )
+
+
 def main():
     load_dotenv()
 
@@ -140,6 +150,12 @@ def main():
         )
     )
     dispatcher.add_handler(CommandHandler('rename_photos', rename_photos))
+    dispatcher.add_handler(
+        CommandHandler(
+            'find_photos_with_same_article',
+            handler_find_photos_with_same_article,
+        )
+    )
 
     updater.start_polling()
     updater.idle()

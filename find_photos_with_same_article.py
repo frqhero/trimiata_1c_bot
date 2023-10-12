@@ -2,6 +2,7 @@ import os.path
 import re
 from io import BytesIO
 
+import yaml
 import requests
 from dotenv import load_dotenv
 
@@ -89,12 +90,35 @@ def check_table(table, result):
             result['wrong_barcodes'] = BytesIO(wrong_barcodes_string.encode())
         raise PhotoError('There are photo naming issues')
 
+
 def get_files_table_from_path(path, result):
     table = create_table(path)
     response_from_1c = make_request(table)
     join_1c_data(table, response_from_1c)
     check_table(table, result)
     return table
+
+
+def prepare_result(files_table, result):
+    article_to_barcode = {}
+    for row in files_table:
+        article = row['oc_article']
+        if article not in article_to_barcode:
+            article_to_barcode[article] = set()
+        article_to_barcode[article].add(row['src_barcode'])
+    articles_with_duplicates = []
+    for article, barcodes in article_to_barcode.items():
+        if len(barcodes) > 1:
+            articles_with_duplicates.append(article)
+    result = {}
+    for row in files_table:
+        if row['oc_article'] in articles_with_duplicates:
+            result.setdefault(row['oc_article'], []).append(
+                row['src_file_name']
+            )
+    for article, file_names in result.items():
+        file_names.sort()
+    return result
 
 
 def main():
@@ -105,8 +129,17 @@ def main():
         'wrong_barcodes': None,
     }
 
-    photo_folder_path = r'PHOTO_SOURCES/SOURCES/PHOTO'
+    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
+    photo_folder_path = os.path.join(photo_sources_path, r'SOURCES/PHOTO')
     files_table = get_files_table_from_path(photo_folder_path, result)
+    duplicating_photos = prepare_result(files_table, result)
+
+    yaml_str = yaml.dump(
+        duplicating_photos, default_flow_style=False, allow_unicode=True
+    )
+    yaml_bytes = yaml_str.encode('utf-8')
+    result['bytes'] = yaml_bytes
+    return result
 
 
 if __name__ == '__main__':
