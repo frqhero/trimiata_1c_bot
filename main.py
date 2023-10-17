@@ -19,6 +19,7 @@ import requests
 
 from photo_renaming import main as photo_renaming
 from find_photos_with_same_article import main as find_photos_with_same_article
+from check_sources import main as check_sources
 
 
 def start(update: Update, context: CallbackContext) -> None:
@@ -130,6 +131,17 @@ def handler_find_photos_with_same_article(
     )
 
 
+def check_sources_handler(update: Update, context: CallbackContext):
+    result = check_sources()
+    if result['PHOTO'] or result['VIDEO']:
+        if result['PHOTO']:
+            update.message.reply_text('PHOTO')
+            if
+            update.message.reply_document(result['PHOTO'])
+
+    update.message.reply_text()
+
+
 def main():
     load_dotenv()
 
@@ -156,6 +168,9 @@ def main():
             'find_photos_with_same_article',
             handler_find_photos_with_same_article,
         )
+    )
+    dispatcher.add_handler(
+        CommandHandler('check_sources', check_sources_handler)
     )
 
     updater.start_polling()
