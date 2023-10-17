@@ -125,7 +125,7 @@ def handler_find_photos_with_same_article(
 ):
     result = find_photos_with_same_article()
     update.message.reply_document(
-        result['bytes'], 'find_photos_with_same_article.yaml'
+        result['bytes'], 'find_photos_with_same_article.txt'
     )
 
 
