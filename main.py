@@ -100,20 +100,20 @@ def stock_data_equivalence_update(update: Update, context: CallbackContext):
 
 
 def rename_photos(update: Update, context: CallbackContext):
-    update.message.reply_text('Renaming started...')
+    temp_message = update.message.reply_text('Renaming started...')
     result = photo_renaming()
     if result['exception']:
-        update.message.edit_text(result['exception'])
+        temp_message.edit_text(result['exception'])
         if result['wrong_names']:
-            update.message.reply_document(
+            temp_message.reply_document(
                 result['wrong_names'], 'wrong_names.txt'
             )
         if result['wrong_barcodes']:
-            update.message.reply_document(
+            temp_message.reply_document(
                 result['wrong_barcodes'], 'wrong_barcodes.txt'
             )
     else:
-        update.message.edit_text(
+        temp_message.edit_text(
             'The renaming operation was successfully completed.\n'
             f'It took {result["renaming_duration"]} seconds.\n'
             f'Before the operation, the destination folder contained {result["photo_number_before"]} files, '
