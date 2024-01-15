@@ -20,6 +20,7 @@ import requests
 from photo_renaming import main as photo_renaming
 from find_photos_with_same_article import main as find_photos_with_same_article
 from check_sources import main as check_sources
+from stock_equivalence import StockEquivalence
 
 
 def start(update: Update, context: CallbackContext) -> None:
@@ -39,65 +40,23 @@ def start(update: Update, context: CallbackContext) -> None:
     update.message.reply_text('Приветствие', reply_markup=keyboard)
 
 
-def go_1c(update):
-    url = os.getenv('STOCK_DATA_EQUIVALENCE')
-    login = os.getenv('1C_LOGIN')
-    password = os.getenv('1C_PASSWORD')
-    if update:
-        params = {'update': ''}
-    else:
-        params = {}
-    response = requests.get(url, params, auth=(login, password))
-    return json.dumps(response.json(), indent=2, ensure_ascii=False)
-
-
-def execute_main_logic(message: Message, update_requred=False):
-    query_duration = ('5', '60')
-    message.edit_text(
-        f'Делаем запрос...\nОжидание ~ {query_duration[update_requred]} сек.'
-    )
-    start = perf_counter()
-    response = go_1c(update_requred)
-    finish = perf_counter()
-    message.edit_text(
-        f'Запрос занял {int(finish - start)} сек.\nСпасибо за ожидание 🙂'
-    )
-    message.reply_text(response, quote=False)
-
-
 def handle_callback(update: Update, context: CallbackContext):
     data = update.callback_query.data
     update.callback_query.answer()
     if data == '1':
-        execute_main_logic(update.callback_query.message)
+        StockEquivalence(update, update_1c_required=False).start()
     elif data == '2':
-        execute_main_logic(update.callback_query.message, True)
+        StockEquivalence(update, update_1c_required=True).start()
     elif data == '3':
         update.callback_query.message.delete()
 
 
 def stock_data_equivalence(update: Update, context: CallbackContext):
-    message = update.message
-    temp_message = message.reply_text(f'Делаем запрос...\nОжидание > 10 сек.')
-    start = perf_counter()
-    response = go_1c(False)
-    finish = perf_counter()
-    temp_message.edit_text(
-        f'Запрос занял {int(finish - start)} сек.\nСпасибо за ожидание 🙂'
-    )
-    temp_message.reply_text(response, quote=False)
+    StockEquivalence(update, update_1c_required=False).start()
 
 
 def stock_data_equivalence_update(update: Update, context: CallbackContext):
-    message = update.message
-    temp_message = message.reply_text(f'Делаем запрос...\nОжидание > 60 сек.')
-    start = perf_counter()
-    response = go_1c(True)
-    finish = perf_counter()
-    temp_message.edit_text(
-        f'Запрос занял {int(finish - start)} сек.\nСпасибо за ожидание 🙂'
-    )
-    temp_message.reply_text(response, quote=False)
+    StockEquivalence(update, update_1c_required=True).start()
 
 
 def rename_photos(update: Update, context: CallbackContext):
@@ -133,17 +92,37 @@ def handler_find_photos_with_same_article(
 
 def check_sources_handler(update: Update, context: CallbackContext):
     result = check_sources()
-    if result['PHOTO'] or result['VIDEO']:
-        if result['PHOTO']:
+    if (
+        result['PHOTO']['wrong_names']
+        or result['PHOTO']['wrong_barcodes']
+        or result['VIDEO']['wrong_names']
+        or result['VIDEO']['wrong_barcodes']
+    ):
+        if result['PHOTO']['wrong_names'] or result['PHOTO']['wrong_barcodes']:
             update.message.reply_text('PHOTO')
-            if
-            update.message.reply_document(result['PHOTO'])
-
-    update.message.reply_text()
+            if result['PHOTO']['wrong_names']:
+                update.message.reply_document(result['PHOTO']['wrong_names'])
+            if result['PHOTO']['wrong_barcodes']:
+                update.message.reply_document(
+                    result['PHOTO']['wrong_barcodes']
+                )
+        if result['VIDEO']['wrong_names'] or result['VIDEO']['wrong_barcodes']:
+            update.message.reply_text('VIDEO')
+            if result['VIDEO']['wrong_names']:
+                update.message.reply_document(result['VIDEO']['wrong_names'])
+            if result['VIDEO']['wrong_barcodes']:
+                update.message.reply_document(
+                    result['VIDEO']['wrong_barcodes']
+                )
+    else:
+        update.message.reply_text(
+            'Files in /SOURCES/PHOTO and /SOURCES/VIDEO '
+            'have correct names and existing barcodes'
+        )
 
 
 def main():
-    load_dotenv()
+    load_dotenv(override=True)
 
     telegram_token = os.getenv('TELEGRAM_TOKEN')
     updater = Updater(telegram_token)
@@ -154,6 +133,7 @@ def main():
         CallbackQueryHandler(handle_callback, pattern='^\d$')
     )
 
+    # data equivalence
     dispatcher.add_handler(
         CommandHandler('stock_data_equivalence', stock_data_equivalence)
     )
@@ -162,6 +142,7 @@ def main():
             'stock_data_equivalence_update', stock_data_equivalence_update
         )
     )
+
     dispatcher.add_handler(CommandHandler('rename_photos', rename_photos))
     dispatcher.add_handler(
         CommandHandler(
