@@ -1,0 +1,11 @@
+services:
+  trimiata_1c_bot:
+    container_name: trimiata_1c_bot
+    build:
+      context: ../
+      dockerfile: src/Dockerfile
+    env_file:
+      - ../.env
+    volumes:
+      - ${SRC_PATH}:${SRC_PATH}
+      - ${DST_PATH}:${DST_PATH}

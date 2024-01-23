@@ -1,13 +1,10 @@
-import json
 import os
-from time import perf_counter
 
 from dotenv import load_dotenv
 from telegram import (
     Update,
     InlineKeyboardMarkup,
     InlineKeyboardButton,
-    Message,
 )
 from telegram.ext import (
     Updater,
@@ -15,11 +12,9 @@ from telegram.ext import (
     CallbackContext,
     CallbackQueryHandler,
 )
-import requests
 
-from photo_renaming import main as photo_renaming
 from find_photos_with_same_article import main as find_photos_with_same_article
-from check_sources import main as check_sources
+from rename_photos import RenamePhotos
 from stock_equivalence import StockEquivalence
 
 
@@ -60,25 +55,8 @@ def stock_data_equivalence_update(update: Update, context: CallbackContext):
 
 
 def rename_photos(update: Update, context: CallbackContext):
-    temp_message = update.message.reply_text('Renaming started...')
-    result = photo_renaming()
-    if result['exception']:
-        temp_message.edit_text(result['exception'])
-        if result['wrong_names']:
-            temp_message.reply_document(
-                result['wrong_names'], 'wrong_names.txt'
-            )
-        if result['wrong_barcodes']:
-            temp_message.reply_document(
-                result['wrong_barcodes'], 'wrong_barcodes.txt'
-            )
-    else:
-        temp_message.edit_text(
-            'The renaming operation was successfully completed.\n'
-            f'It took {result["renaming_duration"]} seconds.\n'
-            f'Before the operation, the destination folder contained {result["photo_number_before"]} files, '
-            f'and it has {result["photo_number_after"]} files afterward.'
-        )
+    rename_photos_class = RenamePhotos(update)
+    rename_photos_class.start()
 
 
 def handler_find_photos_with_same_article(

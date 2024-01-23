@@ -1,4 +1,0 @@
-services:
-  trimiata_1c_bot:
-    container_name: trimiata_1c_bot
-    build: .
