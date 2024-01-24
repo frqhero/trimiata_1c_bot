@@ -5,7 +5,6 @@ services:
       context: ../
       dockerfile: src/Dockerfile
     env_file:
-      - ../.env
+      - .env
     volumes:
-      - ${SRC_PATH}:${SRC_PATH}
-      - ${DST_PATH}:${DST_PATH}
+      - ${PHOTO_SOURCES_PATH}:${PHOTO_SOURCES_PATH}

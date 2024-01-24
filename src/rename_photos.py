@@ -70,15 +70,12 @@ class TablePhotoRename:
             if file_name['barcode']
         }
         url = os.getenv('PHOTO_RENAMING_URL')
-        user = os.getenv('1C_LOGIN')
-        password = os.getenv('1C_PASSWORD')
+        assert url, 'PHOTO_RENAMING_URL is not set'
+        user = os.getenv('LOGIN_1C')
+        assert user, 'LOGIN_1C is not set'
+        password = os.getenv('PASSWORD_1C')
+        assert password, 'PASSWORD_1C is not set'
         data = {'series': list(unique_series)}
-        print(url, user, password)
-        print(url, user, password)
-        print(url, user, password)
-        print(url, user, password)
-        print(url, user, password)
-        print(url, user, password)
         response = requests.post(url, json=data, auth=(user, password))
         response.raise_for_status()
         self.response_json = response.json()
@@ -217,10 +214,10 @@ class DocumentPhotoRename:
 
 class RenamePhotos:
     """Rename telegram entry point"""
-    def __init__(self, update: Update):
+    def __init__(self, update: Update, photo_sources_path):
         self.temp_message = update.message.reply_text('Renaming started...')
-        self.src_path = os.getenv('SRC_PATH')
-        self.dst_path = os.getenv('DST_PATH')
+        self.src_path = os.path.join(photo_sources_path, 'SOURCES', 'PHOTO')
+        self.dst_path = os.path.join(photo_sources_path, 'RENAMED', 'PHOTO')
         self.result = None
 
     def start(self):

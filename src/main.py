@@ -55,7 +55,8 @@ def stock_data_equivalence_update(update: Update, context: CallbackContext):
 
 
 def rename_photos(update: Update, context: CallbackContext):
-    rename_photos_class = RenamePhotos(update)
+    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
+    rename_photos_class = RenamePhotos(update, photo_sources_path)
     rename_photos_class.start()
 
 
