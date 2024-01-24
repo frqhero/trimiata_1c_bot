@@ -1,0 +1,21 @@
+{
+  "commands": [
+    {
+      "command": "stock_data_equivalence",
+      "description": "сделать сверку данных"
+    },
+    {
+      "command": "stock_data_equivalence_update",
+      "description": "сделать сверку данных с обновлением"
+    },
+    {
+      "command": "find_photos_with_same_article",
+      "description": "найти фото с одинаковым артикулом"
+    },
+    {
+      "command": "rename_photos",
+      "description": "переименовать фото"
+    }
+  ],
+  "language_code": "ru"
+}
