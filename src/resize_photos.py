@@ -32,7 +32,8 @@ class DocumentResizePhotos:
                     folder_path = f'{self.dst_path}/{folder_name}'
                     dst_file_path = f'{folder_path}/{file}'
                     img = Image.open(src_file_path)
-                    img.thumbnail((int(size[0]), int(size[1])))
+                    img = img.resize((int(size[0]), int(size[1])), Image.LANCZOS)
+                    img.save('resized_image.jpg', quality=95)
                     img.save(dst_file_path)
 
 
