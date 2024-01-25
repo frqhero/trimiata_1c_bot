@@ -26,15 +26,16 @@ class DocumentResizePhotos:
     def resize(self):
         for root, dirs, files in os.walk(self.src_path):
             for file in files:
+                filename, file_extension = file.split('.')
                 src_file_path = f'{root}/{file}'
                 for size in self.sizes:
                     folder_name = f'{size[0]}x{size[1]}'
                     folder_path = f'{self.dst_path}/{folder_name}'
-                    dst_file_path = f'{folder_path}/{file}'
+                    dst_file_path = f'{folder_path}/{filename}.webp'
                     img = Image.open(src_file_path)
                     img = img.resize((int(size[0]), int(size[1])), Image.LANCZOS)
-                    img.save('resized_image.jpg', quality=95)
-                    img.save(dst_file_path)
+                    img.save(dst_file_path, 'WebP', lossless=True)
+                    # img.save(dst_file_path)
 
 
 class ResizePhotos:
