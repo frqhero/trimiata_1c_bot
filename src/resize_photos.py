@@ -31,7 +31,7 @@ class DocumentResizePhotos:
                 for size in self.sizes:
                     folder_name = f'{size[0]}x{size[1]}'
                     folder_path = f'{self.dst_path}/{folder_name}'
-                    dst_file_path = f'{folder_path}/{filename}.webp'
+                    dst_file_path = f'{folder_path}/{filename}.jpeg'
                     img = Image.open(src_file_path)
                     img = img.resize((int(size[0]), int(size[1])), Image.LANCZOS)
                     img.save(dst_file_path, 'JPEG', quality=90)
