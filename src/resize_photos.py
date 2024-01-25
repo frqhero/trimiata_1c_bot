@@ -40,7 +40,7 @@ class ResizePhotos:
     def __init__(self, update: Update, photo_sources_path):
         self.temp_message = update.message.reply_text('Resizing started...')
         self.src_path = os.path.join(photo_sources_path, 'SOURCES', 'PHOTO')
-        self.dst_path = os.path.join(photo_sources_path, 'COMPRESSED')
+        self.dst_path = os.path.join(photo_sources_path, 'RESIZED_PHOTOS')
         self.sizes = None
 
     def start(self):
