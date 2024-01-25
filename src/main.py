@@ -15,6 +15,7 @@ from telegram.ext import (
 
 from find_photos_with_same_article import main as find_photos_with_same_article
 from rename_photos import RenamePhotos
+from resize_photos import ResizePhotos
 from stock_equivalence import StockEquivalence
 
 
@@ -58,6 +59,12 @@ def rename_photos(update: Update, context: CallbackContext):
     photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
     rename_photos_class = RenamePhotos(update, photo_sources_path)
     rename_photos_class.start()
+
+
+def resize_photos(update: Update, context: CallbackContext):
+    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
+    photo_resize_class = ResizePhotos(update, photo_sources_path)
+    photo_resize_class.start()
 
 
 def handler_find_photos_with_same_article(
@@ -132,6 +139,8 @@ def main():
     dispatcher.add_handler(
         CommandHandler('check_sources', check_sources_handler)
     )
+
+    dispatcher.add_handler(CommandHandler('resize_photos', resize_photos))
 
     updater.start_polling()
     updater.idle()

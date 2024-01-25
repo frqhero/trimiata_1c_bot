@@ -15,7 +15,11 @@
     {
       "command": "rename_photos",
       "description": "переименовать фото"
+    },
+    {
+      "command": "resize_photos",
+      "description": "изменить размер фото"
     }
   ],
-  "language_code": "ru"
+  "language_code": "en"
 }

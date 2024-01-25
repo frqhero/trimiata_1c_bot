@@ -119,9 +119,7 @@ class TablePhotoRename:
             response['wrong_barcodes'] = ', '.join(self.wrong_barcodes)
         if self.response_json:
             response['series_without_aim'] = [
-                row
-                for row in self.table
-                if not row['aim']
+                row for row in self.table if not row['aim']
             ]
         response['photo_number_before'] = self.photo_number_before
         response['renaming_duration'] = self.renaming_duration
@@ -214,6 +212,7 @@ class DocumentPhotoRename:
 
 class RenamePhotos:
     """Rename telegram entry point"""
+
     def __init__(self, update: Update, photo_sources_path):
         self.temp_message = update.message.reply_text('Renaming started...')
         self.src_path = os.path.join(photo_sources_path, 'SOURCES', 'PHOTO')
@@ -234,12 +233,12 @@ class RenamePhotos:
         if self.result['wrong_file_names']:
             self.temp_message.reply_document(
                 BytesIO(self.result['wrong_file_names'].encode()),
-                'wrong_file_names.txt'
+                'wrong_file_names.txt',
             )
         if self.result['wrong_barcodes']:
             self.temp_message.reply_document(
                 BytesIO(self.result['wrong_barcodes'].encode()),
-                'wrong_barcodes.txt'
+                'wrong_barcodes.txt',
             )
 
     def send_result(self):
