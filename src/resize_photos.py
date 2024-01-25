@@ -34,8 +34,7 @@ class DocumentResizePhotos:
                     dst_file_path = f'{folder_path}/{filename}.webp'
                     img = Image.open(src_file_path)
                     img = img.resize((int(size[0]), int(size[1])), Image.LANCZOS)
-                    img.save(dst_file_path, 'WebP', lossless=True)
-                    # img.save(dst_file_path)
+                    img.save(dst_file_path, 'WebP', quality=90)
 
 
 class ResizePhotos:
