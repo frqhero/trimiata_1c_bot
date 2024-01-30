@@ -1,6 +1,6 @@
 up:
-	docker compose -f infra/docker-compose.yaml up --build
+	docker compose -f infra/docker-compose.yaml -p trimiata_1c_bot up --build
 down:
-	docker compose -f infra/docker-compose.yaml down
+	docker compose -f infra/docker-compose.yaml -p trimiata_1c_bot down
 upd:
-	docker compose -f infra/docker-compose.yaml up --build -d
+	docker compose -f infra/docker-compose.yaml -p trimiata_1c_bot up --build -d
