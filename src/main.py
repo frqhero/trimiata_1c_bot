@@ -17,6 +17,7 @@ from find_photos_with_same_article import main as find_photos_with_same_article
 from rename_photos import RenamePhotos
 from resize_photos import ResizePhotos
 from accept_photos import PhotoManager
+from src.check_sources import CheckSourcesManager
 from stock_equivalence import StockEquivalence
 
 
@@ -58,14 +59,12 @@ def stock_data_equivalence_update(update: Update, context: CallbackContext):
 
 def rename_photos(update: Update, context: CallbackContext):
     photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    rename_photos_class = RenamePhotos(update, photo_sources_path, 'PHOTO')
-    rename_photos_class.start()
+    RenamePhotos(update, photo_sources_path, 'PHOTO').start()
 
 
 def rename_videos(update: Update, context: CallbackContext):
     photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    rename_photos_class = RenamePhotos(update, photo_sources_path, 'VIDEO')
-    rename_photos_class.start()
+    RenamePhotos(update, photo_sources_path, 'VIDEO').start()
 
 
 def accept_photos(update: Update, context: CallbackContext):
@@ -82,8 +81,7 @@ def accept_videos(update: Update, context: CallbackContext):
 
 def resize_photos(update: Update, context: CallbackContext):
     photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    photo_resize_class = ResizePhotos(update, photo_sources_path)
-    photo_resize_class.start()
+    ResizePhotos(update, photo_sources_path).start()
 
 
 def handler_find_photos_with_same_article(
@@ -95,35 +93,14 @@ def handler_find_photos_with_same_article(
     )
 
 
-def check_sources_handler(update: Update, context: CallbackContext):
-    result = check_sources()
-    if (
-        result['PHOTO']['wrong_names']
-        or result['PHOTO']['wrong_barcodes']
-        or result['VIDEO']['wrong_names']
-        or result['VIDEO']['wrong_barcodes']
-    ):
-        if result['PHOTO']['wrong_names'] or result['PHOTO']['wrong_barcodes']:
-            update.message.reply_text('PHOTO')
-            if result['PHOTO']['wrong_names']:
-                update.message.reply_document(result['PHOTO']['wrong_names'])
-            if result['PHOTO']['wrong_barcodes']:
-                update.message.reply_document(
-                    result['PHOTO']['wrong_barcodes']
-                )
-        if result['VIDEO']['wrong_names'] or result['VIDEO']['wrong_barcodes']:
-            update.message.reply_text('VIDEO')
-            if result['VIDEO']['wrong_names']:
-                update.message.reply_document(result['VIDEO']['wrong_names'])
-            if result['VIDEO']['wrong_barcodes']:
-                update.message.reply_document(
-                    result['VIDEO']['wrong_barcodes']
-                )
-    else:
-        update.message.reply_text(
-            'Files in /SOURCES/PHOTO and /SOURCES/VIDEO '
-            'have correct names and existing barcodes'
-        )
+def check_photos(update: Update, context: CallbackContext):
+    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
+    CheckSourcesManager(update, photo_sources_path, 'PHOTO').start()
+
+
+def check_videos(update: Update, context: CallbackContext):
+    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
+    CheckSourcesManager(update, photo_sources_path, 'VIDEO').start()
 
 
 def main():
@@ -164,9 +141,8 @@ def main():
             handler_find_photos_with_same_article,
         )
     )
-    dispatcher.add_handler(
-        CommandHandler('check_sources', check_sources_handler)
-    )
+    dispatcher.add_handler(CommandHandler('check_photos', check_photos))
+    dispatcher.add_handler(CommandHandler('check_videos', check_videos))
 
     dispatcher.add_handler(CommandHandler('resize_photos', resize_photos))
 
