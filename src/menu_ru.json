@@ -17,6 +17,10 @@
       "description": "переименовать фото"
     },
     {
+      "command": "rename_videos",
+      "description": "переименовать видео"
+    },
+    {
       "command": "resize_photos",
       "description": "изменить размер фото"
     }

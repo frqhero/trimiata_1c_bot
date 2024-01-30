@@ -57,7 +57,13 @@ def stock_data_equivalence_update(update: Update, context: CallbackContext):
 
 def rename_photos(update: Update, context: CallbackContext):
     photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    rename_photos_class = RenamePhotos(update, photo_sources_path)
+    rename_photos_class = RenamePhotos(update, photo_sources_path, 'PHOTO')
+    rename_photos_class.start()
+
+
+def rename_videos(update: Update, context: CallbackContext):
+    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
+    rename_photos_class = RenamePhotos(update, photo_sources_path, 'VIDEO')
     rename_photos_class.start()
 
 
@@ -130,6 +136,13 @@ def main():
     )
 
     dispatcher.add_handler(CommandHandler('rename_photos', rename_photos))
+    dispatcher.add_handler(
+        CommandHandler(
+            'find_photos_with_same_article',
+            handler_find_photos_with_same_article,
+        )
+    )
+    dispatcher.add_handler(CommandHandler('rename_videos', rename_videos))
     dispatcher.add_handler(
         CommandHandler(
             'find_photos_with_same_article',

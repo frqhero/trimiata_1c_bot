@@ -33,8 +33,14 @@ class TablePhotoRename:
         self.document = document
         self.src_path = document.src_path
         self.dst_path = document.dst_path
+        self.kind = document.kind
         self.table = []
-        self.pattern = r'^\d+_[123]\.jpeg$'
+        if self.kind == 'PHOTO':
+            self.pattern = r'^\d+_[123]\.jpeg$'
+            self.extension = 'jpeg'
+        elif self.kind == 'VIDEO':
+            self.pattern = r'^\d+_v1\.mp4$'
+            self.extension = 'mp4'
         self.response_json = None
         self.wrong_file_names = None
         self.wrong_barcodes = None
@@ -57,6 +63,7 @@ class TablePhotoRename:
             if re.match(self.pattern, file_name):
                 name, _extension = file_name.split('.')
                 barcode, angle = name.split('_')
+                angle = angle.replace('v', '')
 
                 new_row['barcode'] = barcode
                 new_row['angle'] = int(angle)
@@ -166,19 +173,22 @@ class TablePhotoRename:
             if aim['angle1']:
                 photo_file = aim['angle1'][0]
                 src = os.path.join(self.src_path, photo_file['file_name'])
-                new_file_name = f'{aim["aim"]}_1.jpeg'
+                if self.kind == 'PHOTO':
+                    new_file_name = f'{aim["aim"]}_1.{self.extension}'
+                elif self.kind == 'VIDEO':
+                    new_file_name = f'{aim["aim"]}_v1.{self.extension}'
                 dst = os.path.join(self.dst_path, new_file_name)
                 shutil.copy2(src, dst)
             if aim['angle2']:
                 photo_file = aim['angle2'][0]
                 src = os.path.join(self.src_path, photo_file['file_name'])
-                new_file_name = f'{aim["aim"]}_2.jpeg'
+                new_file_name = f'{aim["aim"]}_2.{self.extension}'
                 dst = os.path.join(self.dst_path, new_file_name)
                 shutil.copy2(src, dst)
             if aim['angle3']:
                 photo_file = aim['angle3'][0]
                 src = os.path.join(self.src_path, photo_file['file_name'])
-                new_file_name = f'{aim["aim"]}_3.jpeg'
+                new_file_name = f'{aim["aim"]}_3.{self.extension}'
                 dst = os.path.join(self.dst_path, new_file_name)
                 shutil.copy2(src, dst)
         end = time.time()
@@ -192,7 +202,8 @@ class TablePhotoRename:
 
 
 class DocumentPhotoRename:
-    def __init__(self, src_path, dst_path):
+    def __init__(self, src_path, dst_path, kind):
+        self.kind = kind
         self.src_path = src_path
         self.dst_path = dst_path
         self.result = None
@@ -213,14 +224,17 @@ class DocumentPhotoRename:
 class RenamePhotos:
     """Rename telegram entry point"""
 
-    def __init__(self, update: Update, photo_sources_path):
+    def __init__(self, update: Update, photo_sources_path, kind: str):
+        self.kind = kind.upper()
+        if self.kind not in ('PHOTO', 'VIDEO'):
+            raise ValueError('kind should be PHOTO or VIDEO')
         self.temp_message = update.message.reply_text('Renaming started...')
-        self.src_path = os.path.join(photo_sources_path, 'SOURCES', 'PHOTO')
-        self.dst_path = os.path.join(photo_sources_path, 'RENAMED', 'PHOTO')
+        self.src_path = os.path.join(photo_sources_path, 'SOURCES', self.kind)
+        self.dst_path = os.path.join(photo_sources_path, 'RENAMED', self.kind)
         self.result = None
 
     def start(self):
-        document = DocumentPhotoRename(self.src_path, self.dst_path)
+        document = DocumentPhotoRename(self.src_path, self.dst_path, self.kind)
         document.start()
         self.result = document.result
         if self.result['exception']:
