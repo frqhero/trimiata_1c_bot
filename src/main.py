@@ -17,7 +17,7 @@ from find_photos_with_same_article import main as find_photos_with_same_article
 from rename_photos import RenamePhotos
 from resize_photos import ResizePhotos
 from accept_photos import PhotoManager
-from src.check_sources import CheckSourcesManager
+from check_sources import CheckSourcesManager
 from stock_equivalence import StockEquivalence
 
 

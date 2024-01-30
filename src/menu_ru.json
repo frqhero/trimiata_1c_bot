@@ -29,6 +29,14 @@
       "description": "принять видео"
     },
     {
+      "command": "check_photos",
+      "description": "проверить фото исходники"
+    },
+    {
+      "command": "check_videos",
+      "description": "проверить видео исходники"
+    },
+    {
       "command": "resize_photos",
       "description": "изменить размер фото"
     }
