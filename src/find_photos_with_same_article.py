@@ -46,8 +46,8 @@ def make_request(table):
         file['src_barcode'] for file in table if file['src_barcode']
     }
     url = os.getenv('PHOTO_RENAMING_URL')
-    user = os.getenv('1C_LOGIN')
-    password = os.getenv('1C_PASSWORD')
+    user = os.getenv('LOGIN_1C')
+    password = os.getenv('PASSWORD_1C')
     data = {'series': list(unique_series)}
     response = requests.post(url, json=data, auth=(user, password))
     response.raise_for_status()
