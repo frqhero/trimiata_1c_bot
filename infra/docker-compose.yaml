@@ -1,6 +1,5 @@
 services:
-  trimiata_1c_bot:
-    container_name: trimiata_1c_bot
+  bot:
     build:
       context: ../
       dockerfile: src/Dockerfile
