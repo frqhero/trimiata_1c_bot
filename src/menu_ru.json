@@ -21,6 +21,14 @@
       "description": "переименовать видео"
     },
     {
+      "command": "accept_photos",
+      "description": "принять фото"
+    },
+    {
+      "command": "accept_videos",
+      "description": "принять видео"
+    },
+    {
       "command": "resize_photos",
       "description": "изменить размер фото"
     }

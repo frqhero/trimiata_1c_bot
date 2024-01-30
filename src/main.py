@@ -16,6 +16,7 @@ from telegram.ext import (
 from find_photos_with_same_article import main as find_photos_with_same_article
 from rename_photos import RenamePhotos
 from resize_photos import ResizePhotos
+from accept_photos import PhotoManager
 from stock_equivalence import StockEquivalence
 
 
@@ -65,6 +66,18 @@ def rename_videos(update: Update, context: CallbackContext):
     photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
     rename_photos_class = RenamePhotos(update, photo_sources_path, 'VIDEO')
     rename_photos_class.start()
+
+
+def accept_photos(update: Update, context: CallbackContext):
+    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
+    accept_photo_manager = PhotoManager(update, photo_sources_path, 'PHOTO')
+    accept_photo_manager.start()
+
+
+def accept_videos(update: Update, context: CallbackContext):
+    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
+    accept_photo_manager = PhotoManager(update, photo_sources_path, 'VIDEO')
+    accept_photo_manager.start()
 
 
 def resize_photos(update: Update, context: CallbackContext):
@@ -143,6 +156,8 @@ def main():
         )
     )
     dispatcher.add_handler(CommandHandler('rename_videos', rename_videos))
+    dispatcher.add_handler(CommandHandler('accept_photos', accept_photos))
+    dispatcher.add_handler(CommandHandler('accept_videos', accept_videos))
     dispatcher.add_handler(
         CommandHandler(
             'find_photos_with_same_article',
