@@ -1,0 +1,11 @@
+services:
+  linters:
+    build:
+      context: .
+    volumes:
+      - ./pyproject.toml:/opt/linters/pyproject.toml
+      - ./poetry.lock:/opt/linters/poetry.lock
+      # mount source code to check a code with linter running inside a container
+      - ../src:/src
+    command: 'echo Skipped'
+
