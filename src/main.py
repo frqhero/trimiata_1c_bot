@@ -18,7 +18,7 @@ from rename_photos import RenamePhotos
 from resize_photos import ResizePhotos
 from accept_photos import PhotoManager
 from check_sources import CheckSourcesManager
-from src.cancel_order import CancelOrder
+from cancel_order import CancelOrder
 from stock_equivalence import StockEquivalence
 
 
