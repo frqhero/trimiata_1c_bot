@@ -78,10 +78,10 @@ class TablePhotoRename:
         }
         url = os.getenv('PHOTO_RENAMING_URL')
         assert url, 'PHOTO_RENAMING_URL is not set'
-        user = os.getenv('LOGIN_1C')
+        user = os.getenv('1C_LOGIN')
         assert user, 'LOGIN_1C is not set'
-        password = os.getenv('PASSWORD_1C')
-        assert password, 'PASSWORD_1C is not set'
+        password = os.getenv('1C_PASSWORD')
+        assert password, '1C_PASSWORD is not set'
         data = {'series': list(unique_series)}
         response = requests.post(url, json=data, auth=(user, password))
         response.raise_for_status()

@@ -74,8 +74,8 @@ class Photos:
         if not unique_series:
             return
         url = os.getenv('PHOTO_RENAMING_URL')
-        user = os.getenv('LOGIN_1C')
-        password = os.getenv('PASSWORD_1C')
+        user = os.getenv('1C_LOGIN')
+        password = os.getenv('1C_PASSWORD')
         data = {'series': list(unique_series)}
         response = requests.post(url, json=data, auth=(user, password))
         response.raise_for_status()

@@ -26,8 +26,8 @@ class StockEquivalence:
 
     def make_request(self):
         url = os.getenv('STOCK_DATA_EQUIVALENCE')
-        login = os.getenv('LOGIN_1C')
-        password = os.getenv('PASSWORD_1C')
+        login = os.getenv('1C_LOGIN')
+        password = os.getenv('1C_PASSWORD')
         if self.update_1c_required:
             params = {'update': ''}
         else:

@@ -18,6 +18,7 @@ from rename_photos import RenamePhotos
 from resize_photos import ResizePhotos
 from accept_photos import PhotoManager
 from check_sources import CheckSourcesManager
+from src.cancel_order import CancelOrder
 from stock_equivalence import StockEquivalence
 
 
@@ -103,6 +104,19 @@ def check_videos(update: Update, context: CallbackContext):
     CheckSourcesManager(update, photo_sources_path, 'VIDEO').start()
 
 
+def cancel_order(update: Update, context: CallbackContext):
+    allowed_user_id = 275826730
+    # allowed_chat_id = -1001923280854
+    chat_id = update.message.chat.id
+    if update.message.from_user.id != allowed_user_id:
+        return
+    if not context.args:
+        update.message.reply_text('Укажите номер заказа')
+        return
+    order_id = context.args[0]
+    CancelOrder(update, order_id).start()
+
+
 def main():
     load_dotenv(override=True)
 
@@ -145,6 +159,8 @@ def main():
     dispatcher.add_handler(CommandHandler('check_videos', check_videos))
 
     dispatcher.add_handler(CommandHandler('resize_photos', resize_photos))
+
+    dispatcher.add_handler(CommandHandler('cancel_order', cancel_order))
 
     updater.start_polling()
     updater.idle()
