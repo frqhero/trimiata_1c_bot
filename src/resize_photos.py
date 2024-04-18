@@ -24,7 +24,7 @@ class DocumentResizePhotos:
             os.makedirs(folder_path, exist_ok=True)
 
     def resize(self):
-        for root, dirs, files in os.walk(self.src_path):
+        for root, _, files in os.walk(self.src_path):
             for file in files:
                 filename, file_extension = file.split('.')
                 src_file_path = f'{root}/{file}'

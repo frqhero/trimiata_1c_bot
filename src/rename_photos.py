@@ -57,7 +57,7 @@ class TablePhotoRename:
             new_row = {column: None for column in self.columns}
             new_row['file_name'] = file_name
             new_row['created_at'] = os.path.getctime(
-                os.path.join(self.src_path, file_name)
+                os.path.join(self.src_path, file_name),
             )
 
             if re.match(self.pattern, file_name):
@@ -155,13 +155,13 @@ class TablePhotoRename:
                     new_row_aim['angle3'].append(file_name)
 
             new_row_aim['angle1'].sort(
-                key=lambda x: x['created_at'], reverse=True
+                key=lambda x: x['created_at'], reverse=True,
             )
             new_row_aim['angle2'].sort(
-                key=lambda x: x['created_at'], reverse=True
+                key=lambda x: x['created_at'], reverse=True,
             )
             new_row_aim['angle3'].sort(
-                key=lambda x: x['created_at'], reverse=True
+                key=lambda x: x['created_at'], reverse=True,
             )
             self.aim_table.append(new_row_aim)
 
@@ -222,7 +222,7 @@ class DocumentPhotoRename:
 
 
 class RenamePhotos:
-    """Rename telegram entry point"""
+    """Rename telegram entry point."""
 
     def __init__(self, update: Update, photo_sources_path, kind: str):
         self.kind = kind.upper()
@@ -260,5 +260,5 @@ class RenamePhotos:
             'The renaming operation was successfully completed.\n'
             f'It took {self.result["renaming_duration"]} seconds.\n'
             f'Before the operation, the destination folder contained {self.result["photo_number_before"]} files, '
-            f'and it has {self.result["photo_number_after"]} files afterward.'
+            f'and it has {self.result["photo_number_after"]} files afterward.',
         )

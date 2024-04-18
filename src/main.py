@@ -22,17 +22,17 @@ from stock_equivalence import StockEquivalence
 
 
 def start(update: Update, context: CallbackContext) -> None:
-    """Inform user about what this bot can do"""
+    """Inform user about what this bot can do."""
     keyboard = InlineKeyboardMarkup(
         [
             [InlineKeyboardButton(text='Показать сверку', callback_data='1')],
             [
                 InlineKeyboardButton(
-                    text='Загрузить отчет и показать сверку', callback_data='2'
-                )
+                    text='Загрузить отчет и показать сверку', callback_data='2',
+                ),
             ],
             [InlineKeyboardButton(text='Отмена', callback_data='3')],
-        ]
+        ],
     )
 
     update.message.reply_text('Приветствие', reply_markup=keyboard)
@@ -85,11 +85,11 @@ def resize_photos(update: Update, context: CallbackContext):
 
 
 def handler_find_photos_with_same_article(
-    update: Update, context: CallbackContext
+    update: Update, context: CallbackContext,
 ):
     result = find_photos_with_same_article()
     update.message.reply_document(
-        result['bytes'], 'find_photos_with_same_article.txt'
+        result['bytes'], 'find_photos_with_same_article.txt',
     )
 
 
@@ -112,17 +112,17 @@ def main():
 
     dispatcher.add_handler(CommandHandler('bot', start))
     dispatcher.add_handler(
-        CallbackQueryHandler(handle_callback, pattern='^\d$')
+        CallbackQueryHandler(handle_callback, pattern='^\d$'),  # noqa W605
     )
 
     # data equivalence
     dispatcher.add_handler(
-        CommandHandler('stock_data_equivalence', stock_data_equivalence)
+        CommandHandler('stock_data_equivalence', stock_data_equivalence),
     )
     dispatcher.add_handler(
         CommandHandler(
-            'stock_data_equivalence_update', stock_data_equivalence_update
-        )
+            'stock_data_equivalence_update', stock_data_equivalence_update,
+        ),
     )
 
     dispatcher.add_handler(CommandHandler('rename_photos', rename_photos))
@@ -130,7 +130,7 @@ def main():
         CommandHandler(
             'find_photos_with_same_article',
             handler_find_photos_with_same_article,
-        )
+        ),
     )
     dispatcher.add_handler(CommandHandler('rename_videos', rename_videos))
     dispatcher.add_handler(CommandHandler('accept_photos', accept_photos))
@@ -139,7 +139,7 @@ def main():
         CommandHandler(
             'find_photos_with_same_article',
             handler_find_photos_with_same_article,
-        )
+        ),
     )
     dispatcher.add_handler(CommandHandler('check_photos', check_photos))
     dispatcher.add_handler(CommandHandler('check_videos', check_videos))

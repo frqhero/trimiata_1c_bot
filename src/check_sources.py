@@ -13,7 +13,7 @@ class CheckSourcesManager:
             raise ValueError('kind should be PHOTO or VIDEO')
         self.temp_message = update.message.reply_text('Checking started...')
         self.src_path = os.path.join(
-            photo_sources_path, 'SOURCES', self.kind
+            photo_sources_path, 'SOURCES', self.kind,
         )
 
     def start(self):
@@ -22,8 +22,9 @@ class CheckSourcesManager:
             document.check_folder()
             document.validate_files()
             self.temp_message.reply_text('Checking completed.')
-        except PhotoFileNamesIssue as e:
+        except PhotoFileNamesError as e:
             self.temp_message.reply_text(f'Error: {e}')
+
 
 class Photos:
     def __init__(self, manager):
@@ -47,16 +48,12 @@ class Photos:
         self.validate_table()
 
     def create_table(self):
-        """
-        Заполняет таблицу
-        """
+        """Заполняет таблицу."""
         for file_name in os.listdir(self.manager.src_path):
             self.photos.append(Photo(file_name, self.pattern))
 
     def make_request(self):
-        """
-        Делает запрос к 1С
-        """
+        """Делает запрос к 1С."""
         load_dotenv(override=True)
         unique_series = self.get_unique_series()
         if not unique_series:
@@ -70,9 +67,7 @@ class Photos:
         self.request_result = response.json()
 
     def get_unique_series(self):
-        """
-        Возвращает множество уникальных штрихкодов кроме пустых
-        """
+        """Возвращает множество уникальных штрихкодов кроме пустых."""
         unique_series = {
             photo.barcode
             for photo in self.photos
@@ -81,9 +76,7 @@ class Photos:
         return unique_series
 
     def join_1c_data(self):
-        """
-        Заполняет штрихкод фотографии из ответа от 1С
-        """
+        """Заполняет штрихкод фотографии из ответа от 1С."""
         for photo in self.photos:
             if not photo.barcode:
                 continue
@@ -97,6 +90,8 @@ class Photos:
 
     def validate_table(self):
         """
+        Проверяет таблицу.
+
         Проверяет таблицу на наличие невалидных имен файлов
         и несуществующих штрихкодов
         Если есть одно или второе, то файловых операций не будет выполнено
@@ -112,10 +107,11 @@ class Photos:
             if photo.barcode and not photo.series
         ]
         if invalid_pattern_file_names or non_existent_barcode_file_names:
-            raise PhotoFileNamesIssue(
+            raise PhotoFileNamesError(
                 invalid_pattern_file_names,
                 non_existent_barcode_file_names,
             )
+
 
 class Photo:
     def __init__(self, file_name, pattern):
@@ -129,9 +125,9 @@ class Photo:
             self.barcode, self.angle = name.split('_')
 
 
-class PhotoFileNamesIssue(Exception):
+class PhotoFileNamesError(Exception):
     def __init__(
-        self, invalid_pattern_file_names, non_existent_barcode_file_names
+        self, invalid_pattern_file_names, non_existent_barcode_file_names,
     ):
         message = 'There are photo naming issues\n'
         if invalid_pattern_file_names:

@@ -114,9 +114,9 @@ def prepare_result(files_table, result):
     for row in files_table:
         if row['oc_article'] in articles_with_duplicates:
             result.setdefault(row['oc_article'], []).append(
-                row['src_file_name']
+                row['src_file_name'],
             )
-    for article, file_names in result.items():
+    for _, file_names in result.items():
         file_names.sort()
     return result
 
@@ -135,7 +135,7 @@ def main():
     duplicating_photos = prepare_result(files_table, result)
 
     yaml_str = yaml.dump(
-        duplicating_photos, default_flow_style=False, allow_unicode=True
+        duplicating_photos, default_flow_style=False, allow_unicode=True,
     )
     yaml_bytes = yaml_str.encode('utf-8')
     result['bytes'] = yaml_bytes
