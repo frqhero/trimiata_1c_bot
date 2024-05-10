@@ -69,13 +69,13 @@ class MediaFile:
 
 
 class SourceArticles:
-    photo_sources_path = settings.MEDIA_SOURCES_PATH
+    media_sources_path = settings.MEDIA_SOURCES_PATH
 
     def __init__(self, media_type: str):
         self.media_type = media_type
         if self.media_type not in ('PHOTO', 'VIDEO'):
             raise ValueError('kind should be PHOTO or VIDEO')
-        self.source_path = os.path.join(self.photo_sources_path, 'SOURCES', self.media_type)
+        self.source_path = os.path.join(self.media_sources_path, 'SOURCES', self.media_type)
         self.files = []
         self.request_result = None
 
@@ -108,19 +108,19 @@ class SourceArticles:
 
 
 class MediaAccept:
-    photo_sources_path = settings.MEDIA_SOURCES_PATH
+    media_sources_path = settings.MEDIA_SOURCES_PATH
 
     @classmethod
     def set_source_folder(cls, path: str):
-        cls.photo_sources_path = path
+        cls.media_sources_path = path
 
     def __init__(self, media_type: str):
         self.kind = media_type.upper()
         if self.kind not in ('PHOTO', 'VIDEO'):
             raise ValueError('kind should be PHOTO or VIDEO')
         self.media_type = media_type
-        self.source_path = os.path.join(self.photo_sources_path, 'PHOTO_TEAM', self.kind)
-        self.destination_path = os.path.join(self.photo_sources_path, 'ACCEPTED', self.kind)
+        self.source_path = os.path.join(self.media_sources_path, 'PHOTO_TEAM', self.kind)
+        self.destination_path = os.path.join(self.media_sources_path, 'ACCEPTED', self.kind)
         self.media_files = []
 
     def start(self):

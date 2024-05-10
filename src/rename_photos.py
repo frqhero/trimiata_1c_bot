@@ -7,6 +7,8 @@ from io import BytesIO
 import requests
 from telegram import Update
 
+from src.env_settings import settings
+
 
 class TablePhotoRename:
     columns = (
@@ -223,14 +225,15 @@ class DocumentPhotoRename:
 
 class RenamePhotos:
     """Rename telegram entry point."""
+    media_sources_path = settings.MEDIA_SOURCES_PATH
 
-    def __init__(self, update: Update, photo_sources_path, kind: str):
+    def __init__(self, update: Update, kind: str):
         self.kind = kind.upper()
         if self.kind not in ('PHOTO', 'VIDEO'):
             raise ValueError('kind should be PHOTO or VIDEO')
         self.temp_message = update.message.reply_text('Renaming started...')
-        self.src_path = os.path.join(photo_sources_path, 'SOURCES', self.kind)
-        self.dst_path = os.path.join(photo_sources_path, 'RENAMED', self.kind)
+        self.src_path = os.path.join(self.media_sources_path, 'SOURCES', self.kind)
+        self.dst_path = os.path.join(self.media_sources_path, 'RENAMED', self.kind)
         self.result = None
 
     def start(self):

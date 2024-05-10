@@ -1,8 +1,9 @@
 import json
-import os
 from time import perf_counter
 
 import requests
+
+from src.env_settings import settings
 
 
 # Когда через кнопку, то колбек и меняем наше сообщение, пишем, что выполняется.
@@ -13,6 +14,10 @@ import requests
 
 
 class StockEquivalence:
+    url = settings.STOCK_DATA_EQUIVALENCE
+    loging = settings.LOGIN_1C
+    password = settings.PASSWORD_1C
+
     def __init__(self, update, update_1c_required):
         self.callback_query = bool(update.callback_query)
         self.message = update.callback_query.message if self.callback_query else update.message
@@ -25,14 +30,11 @@ class StockEquivalence:
             self.message2 = self.message.reply_text(initial_response)
 
     def make_request(self):
-        url = os.getenv('STOCK_DATA_EQUIVALENCE')
-        login = os.getenv('1C_LOGIN')
-        password = os.getenv('1C_PASSWORD')
         if self.update_1c_required:
             params = {'update': ''}
         else:
             params = {}
-        response = requests.get(url, params, auth=(login, password))
+        response = requests.get(self.url, params, auth=(self.login, self.password))
         return json.dumps(response.json(), indent=2, ensure_ascii=False)
 
     def start(self):

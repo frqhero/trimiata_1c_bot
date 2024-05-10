@@ -6,4 +6,4 @@ services:
     env_file:
       - .env
     volumes:
-      - ${PHOTO_SOURCES_PATH}:${PHOTO_SOURCES_PATH}
+      - ${MEDIA_SOURCES_PATH}:${MEDIA_SOURCES_PATH}

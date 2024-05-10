@@ -5,15 +5,19 @@ import requests
 from dotenv import load_dotenv
 from telegram import Update
 
+from src.env_settings import settings
+
 
 class CheckSourcesManager:
-    def __init__(self, update: Update, photo_sources_path: str, kind: str):
+    media_sources_path = settings.MEDIA_SOURCES_PATH
+
+    def __init__(self, update: Update, kind: str):
         self.kind = kind.upper()
         if self.kind not in ('PHOTO', 'VIDEO'):
             raise ValueError('kind should be PHOTO or VIDEO')
         self.temp_message = update.message.reply_text('Checking started...')
         self.src_path = os.path.join(
-            photo_sources_path, 'SOURCES', self.kind,
+            self.media_sources_path, 'SOURCES', self.kind,
         )
 
     def start(self):

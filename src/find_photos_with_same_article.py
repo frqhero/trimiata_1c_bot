@@ -129,7 +129,7 @@ def main():
         'wrong_barcodes': None,
     }
 
-    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
+    photo_sources_path = os.getenv('MEDIA_SOURCES_PATH')
     photo_folder_path = os.path.join(photo_sources_path, r'SOURCES/PHOTO')
     files_table = get_files_table_from_path(photo_folder_path, result)
     duplicating_photos = prepare_result(files_table, result)

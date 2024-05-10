@@ -16,7 +16,7 @@ from telegram.ext import (
 from find_photos_with_same_article import main as find_photos_with_same_article
 from rename_photos import RenamePhotos
 from resize_photos import ResizePhotos
-from accept_photos import PhotoManager
+from accept_media import MediaAccept
 from check_sources import CheckSourcesManager
 from cancel_order import CancelOrder
 from stock_equivalence import StockEquivalence
@@ -59,35 +59,33 @@ def stock_data_equivalence_update(update: Update, context: CallbackContext):
 
 
 def rename_photos(update: Update, context: CallbackContext):
-    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    RenamePhotos(update, photo_sources_path, 'PHOTO').start()
+    RenamePhotos(update, 'PHOTO').start()
 
 
 def rename_videos(update: Update, context: CallbackContext):
-    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    RenamePhotos(update, photo_sources_path, 'VIDEO').start()
+    RenamePhotos(update, 'VIDEO').start()
 
 
 def accept_photos(update: Update, context: CallbackContext):
-    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    accept_photo_manager = PhotoManager(update, photo_sources_path, 'PHOTO')
     temp_message = update.message.reply_text('Accepting started...')
     try:
-        accept_photo_manager.start()
+        MediaAccept('PHOTO').start()
         temp_message.reply_text('Accepting completed.')
     except Exception as e:
         temp_message.reply_text(f'Error: {e}')
 
 
 def accept_videos(update: Update, context: CallbackContext):
-    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    accept_photo_manager = PhotoManager(update, photo_sources_path, 'VIDEO')
-    accept_photo_manager.start()
+    temp_message = update.message.reply_text('Accepting started...')
+    try:
+        MediaAccept('VIDEO').start()
+        temp_message.reply_text('Accepting completed.')
+    except Exception as e:
+        temp_message.reply_text(f'Error: {e}')
 
 
 def resize_photos(update: Update, context: CallbackContext):
-    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    ResizePhotos(update, photo_sources_path).start()
+    ResizePhotos(update).start()
 
 
 def handler_find_photos_with_same_article(
@@ -100,13 +98,11 @@ def handler_find_photos_with_same_article(
 
 
 def check_photos(update: Update, context: CallbackContext):
-    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    CheckSourcesManager(update, photo_sources_path, 'PHOTO').start()
+    CheckSourcesManager(update, 'PHOTO').start()
 
 
 def check_videos(update: Update, context: CallbackContext):
-    photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
-    CheckSourcesManager(update, photo_sources_path, 'VIDEO').start()
+    CheckSourcesManager(update, 'VIDEO').start()
 
 
 def cancel_order(update: Update, context: CallbackContext):

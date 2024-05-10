@@ -3,6 +3,8 @@ import os
 from PIL import Image
 from telegram import Update
 
+from src.env_settings import settings
+
 
 class DocumentResizePhotos:
     def __init__(self, src_path, dst_path):
@@ -38,10 +40,12 @@ class DocumentResizePhotos:
 
 
 class ResizePhotos:
-    def __init__(self, update: Update, photo_sources_path):
+    media_sources_path = settings.MEDIA_SOURCES_PATH
+
+    def __init__(self, update: Update):
         self.temp_message = update.message.reply_text('Resizing started...')
-        self.src_path = os.path.join(photo_sources_path, 'SOURCES', 'PHOTO')
-        self.dst_path = os.path.join(photo_sources_path, 'RESIZED_PHOTOS')
+        self.src_path = os.path.join(self.media_sources_path, 'SOURCES', 'PHOTO')
+        self.dst_path = os.path.join(self.media_sources_path, 'RESIZED_PHOTOS')
         self.sizes = None
 
     def start(self):
