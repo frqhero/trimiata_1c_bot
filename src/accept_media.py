@@ -110,10 +110,6 @@ class SourceArticles:
 class MediaAccept:
     media_sources_path = settings.MEDIA_SOURCES_PATH
 
-    @classmethod
-    def set_source_folder(cls, path: str):
-        cls.media_sources_path = path
-
     def __init__(self, media_type: str):
         self.kind = media_type.upper()
         if self.kind not in ('PHOTO', 'VIDEO'):

@@ -31,6 +31,10 @@ class CheckSourcesManager:
 
 
 class Photos:
+    url = settings.PHOTO_RENAMING_URL
+    user = settings.LOGIN_1C
+    password = settings.PASSWORD_1C
+
     def __init__(self, manager):
         self.manager = manager
         self.photos = []
@@ -62,11 +66,8 @@ class Photos:
         unique_series = self.get_unique_series()
         if not unique_series:
             return
-        url = os.getenv('PHOTO_RENAMING_URL')
-        user = os.getenv('1C_LOGIN')
-        password = os.getenv('1C_PASSWORD')
         data = {'series': list(unique_series)}
-        response = requests.post(url, json=data, auth=(user, password))
+        response = requests.post(self.url, json=data, auth=(self.user, self.password))
         response.raise_for_status()
         self.request_result = response.json()
 
