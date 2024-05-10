@@ -112,7 +112,7 @@ def check_videos(update: Update, context: CallbackContext):
 def cancel_order(update: Update, context: CallbackContext):
     allowed_user_id = 275826730
     # allowed_chat_id = -1001923280854
-    chat_id = update.message.chat.id
+    # chat_id = update.message.chat.id
     if update.message.from_user.id != allowed_user_id:
         return
     if not context.args:

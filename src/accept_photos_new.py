@@ -178,11 +178,11 @@ class MediaAccept:
         source_articles_articles = source_articles.get_articles()
         article_intersection = articles & source_articles_articles
         file_names = '\n'.join(
-            [media_file.file_name for media_file in self.media_files if media_file.article in article_intersection]
+            [media_file.file_name for media_file in self.media_files if media_file.article in article_intersection],
         )
         if article_intersection:
             raise ValueError(
-                f'Articles {article_intersection} are already in the source folder.\nFile names:\n{file_names}'
+                f'Articles {article_intersection} are already in the source folder.\nFile names:\n{file_names}',
             )
 
     def get_articles(self):

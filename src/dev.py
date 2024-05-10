@@ -7,4 +7,3 @@ MediaAccept.set_source_folder(settings.MEDIA_SOURCES_PATH)
 
 photo_accept = MediaAccept('PHOTO')
 photo_accept.start()
-1
