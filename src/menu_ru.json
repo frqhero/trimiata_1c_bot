@@ -39,6 +39,10 @@
     {
       "command": "resize_photos",
       "description": "изменить размер фото"
+    },
+    {
+      "command": "cancel_order",
+      "description": "отменить заказ"
     }
   ],
   "language_code": "en"
