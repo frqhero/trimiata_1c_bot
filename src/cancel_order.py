@@ -1,6 +1,6 @@
 import requests
 
-from src.env_settings import settings
+from env_settings import settings
 
 
 class CancelOrder:

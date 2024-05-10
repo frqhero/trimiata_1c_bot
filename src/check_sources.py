@@ -5,7 +5,7 @@ import requests
 from dotenv import load_dotenv
 from telegram import Update
 
-from src.env_settings import settings
+from env_settings import settings
 
 
 class CheckSourcesManager:

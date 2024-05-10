@@ -3,7 +3,7 @@ from time import perf_counter
 
 import requests
 
-from src.env_settings import settings
+from env_settings import settings
 
 
 # Когда через кнопку, то колбек и меняем наше сообщение, пишем, что выполняется.

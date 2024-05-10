@@ -3,7 +3,7 @@ import os
 from PIL import Image
 from telegram import Update
 
-from src.env_settings import settings
+from env_settings import settings
 
 
 class DocumentResizePhotos:

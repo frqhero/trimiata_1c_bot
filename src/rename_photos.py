@@ -7,7 +7,7 @@ from io import BytesIO
 import requests
 from telegram import Update
 
-from src.env_settings import settings
+from env_settings import settings
 
 
 class TablePhotoRename:

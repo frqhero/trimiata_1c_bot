@@ -4,8 +4,8 @@ import shutil
 
 import requests
 
-from src.env_settings import settings
-from src.pydantic_models import PhotoRenamingResponse
+from env_settings import settings
+from pydantic_models import PhotoRenamingResponse
 
 
 class PhotoFileNamesError(Exception):
