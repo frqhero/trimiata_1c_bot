@@ -71,7 +71,12 @@ def rename_videos(update: Update, context: CallbackContext):
 def accept_photos(update: Update, context: CallbackContext):
     photo_sources_path = os.getenv('PHOTO_SOURCES_PATH')
     accept_photo_manager = PhotoManager(update, photo_sources_path, 'PHOTO')
-    accept_photo_manager.start()
+    temp_message = update.message.reply_text('Accepting started...')
+    try:
+        accept_photo_manager.start()
+        temp_message.reply_text('Accepting completed.')
+    except Exception as e:
+        temp_message.reply_text(f'Error: {e}')
 
 
 def accept_videos(update: Update, context: CallbackContext):
