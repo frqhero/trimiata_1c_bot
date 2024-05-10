@@ -15,7 +15,7 @@ from env_settings import settings
 
 class StockEquivalence:
     url = settings.STOCK_DATA_EQUIVALENCE
-    loging = settings.LOGIN_1C
+    login = settings.LOGIN_1C
     password = settings.PASSWORD_1C
 
     def __init__(self, update, update_1c_required):
