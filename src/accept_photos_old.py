@@ -6,6 +6,8 @@ import requests
 from dotenv import load_dotenv
 from telegram import Update
 
+from env_settings import settings
+
 
 class PhotoManager:
     def __init__(self, update: Update, photo_sources_path: str, kind: str):
@@ -30,6 +32,10 @@ class PhotoManager:
 
 
 class Photos:
+    url = settings.PHOTO_RENAMING_URL
+    user = settings.LOGIN_1C
+    password = settings.PASSWORD_1C
+
     def __init__(self, manager):
         self.manager = manager
         self.photos = []

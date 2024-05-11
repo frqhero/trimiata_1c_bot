@@ -6,6 +6,8 @@ import yaml
 import requests
 from dotenv import load_dotenv
 
+from env_settings import settings
+
 
 class PhotoError(Exception):
     pass
@@ -45,9 +47,9 @@ def make_request(table):
     unique_series = {
         file['src_barcode'] for file in table if file['src_barcode']
     }
-    url = os.getenv('PHOTO_RENAMING_URL')
-    user = os.getenv('1C_LOGIN')
-    password = os.getenv('1C_PASSWORD')
+    url = settings.MEDIA_SOURCES_PATH
+    user = settings.LOGIN_1C
+    password = settings.PASSWORD_1C
     data = {'series': list(unique_series)}
     response = requests.post(url, json=data, auth=(user, password))
     response.raise_for_status()

@@ -1,18 +1,11 @@
 # Trimiata bot
 
-## env vars для приложения
-* `TELEGRAM_TOKEN`
-* `STOCK_DATA_EQUIVALENCE`
-* `1C_LOGIN`
-* `1C_PASSWORD`
 
-## Для монтирования волюмов
-* `SRC_PATH`
-* `DST_PATH`
+## Список переменных окружения
+Список переменных окружения, которые нужны приложению для работы находятся в файле `env_settings.py`.
 
 ## docker
-* `docker build -t trim_bot:0 .`
-* `docker run -d --name trim_bot --restart=always --env-file .env -v /mnt/PHOTO_SOURCES:/mnt/PHOTO_SOURCES trim_bot:0`
+`make upd`
 
 ## Функции
 * `/stock_data_equivalence` - делает запрос к 1С, получает данные о результатах сверки без предварительного запроса к сайту

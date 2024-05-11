@@ -11,6 +11,10 @@ from env_settings import settings
 
 
 class TablePhotoRename:
+    url = settings.PHOTO_RENAMING_URL
+    user = settings.LOGIN_1C
+    password = settings.PASSWORD_1C
+
     columns = (
         'file_name',
         'created_at',
@@ -78,14 +82,8 @@ class TablePhotoRename:
             for file_name in self.table
             if file_name['barcode']
         }
-        url = os.getenv('PHOTO_RENAMING_URL')
-        assert url, 'PHOTO_RENAMING_URL is not set'
-        user = os.getenv('1C_LOGIN')
-        assert user, 'LOGIN_1C is not set'
-        password = os.getenv('1C_PASSWORD')
-        assert password, '1C_PASSWORD is not set'
         data = {'series': list(unique_series)}
-        response = requests.post(url, json=data, auth=(user, password))
+        response = requests.post(self.url, json=data, auth=(self.user, self.password))
         response.raise_for_status()
         self.response_json = response.json()
 
