@@ -56,6 +56,17 @@ class MediaFile:
     def __str__(self):
         return f'{self.file_name}'
 
+    def __repr__(self):
+        return f'[{self.file_name}, {self.article}]'
+
+    def __eq__(self, other):
+        if isinstance(other, str):
+            return self.article == other
+        return NotImplemented
+
+    def __hash__(self):
+        return hash(self.file_name)
+
     def fill_1c_data(self, request_result):
         if not self.barcode:
             return
@@ -79,7 +90,7 @@ class SourceArticles:
         self.files = []
         self.request_result = None
 
-    def start(self):
+    def __call__(self):
         self.fill_files_from_folder()
         request_1c = CallPhotoRenaming(self.get_unique_series())
         self.fill_1c_data(request_1c.request_result)
@@ -106,6 +117,14 @@ class SourceArticles:
     def get_articles(self):
         return {media_file.article for media_file in self.files if media_file.article}
 
+    def get_already_existing_reprs(self, article_intersection):
+        article_intersection = list(article_intersection)
+        result = []
+        for media_file in self.files:
+            if media_file in article_intersection:
+                result.append(repr(media_file))
+        return result
+
 
 class MediaAccept:
     media_sources_path = settings.MEDIA_SOURCES_PATH
@@ -119,7 +138,7 @@ class MediaAccept:
         self.destination_path = os.path.join(self.media_sources_path, 'ACCEPTED', self.kind)
         self.media_files = []
 
-    def start(self):
+    def __call__(self):
         self.check_folders()
         self.fill_files_from_folder()
         request_1c = CallPhotoRenaming(self.get_unique_series())
@@ -170,15 +189,17 @@ class MediaAccept:
     def check_article_uniqueness(self):
         articles = self.get_articles()
         source_articles = SourceArticles(self.media_type)
-        source_articles.start()
+        source_articles()
         source_articles_articles = source_articles.get_articles()
         article_intersection = articles & source_articles_articles
         file_names = '\n'.join(
-            [media_file.file_name for media_file in self.media_files if media_file.article in article_intersection],
+            [repr(media_file) for media_file in self.media_files if media_file.article in article_intersection],
         )
+        source_files = source_articles.get_already_existing_reprs(article_intersection)
+        source_files = '\n'.join(source_files)
         if article_intersection:
             raise ValueError(
-                f'Articles {article_intersection} are already in the source folder.\nFile names:\n{file_names}',
+                f'Articles {article_intersection} are already in the source folder.\nFile names:\n{file_names}\nSources:\n{source_files}',
             )
 
     def get_articles(self):
@@ -191,3 +212,7 @@ class MediaAccept:
             )
             dst = os.path.join(self.destination_path, media_file.file_name)
             shutil.move(src, dst)
+
+
+if __name__ == '__main__':
+    MediaAccept('PHOTO')()

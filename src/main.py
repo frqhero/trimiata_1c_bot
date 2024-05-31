@@ -69,7 +69,8 @@ def rename_videos(update: Update, context: CallbackContext):
 def accept_photos(update: Update, context: CallbackContext):
     temp_message = update.message.reply_text('Accepting started...')
     try:
-        MediaAccept('PHOTO').start()
+        media_accept = MediaAccept('PHOTO')
+        media_accept()
         temp_message.reply_text('Accepting completed.')
     except Exception as e:
         temp_message.reply_text(f'Error: {e}')
@@ -78,7 +79,8 @@ def accept_photos(update: Update, context: CallbackContext):
 def accept_videos(update: Update, context: CallbackContext):
     temp_message = update.message.reply_text('Accepting started...')
     try:
-        MediaAccept('VIDEO').start()
+        media_accept = MediaAccept('VIDEO')
+        media_accept()
         temp_message.reply_text('Accepting completed.')
     except Exception as e:
         temp_message.reply_text(f'Error: {e}')
