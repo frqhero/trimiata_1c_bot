@@ -15,4 +15,4 @@ class Settings(BaseSettings):
     CANCEL_ORDER_URL: str = Field(description='Cancel order by order_id')
 
 settings = Settings()
-print("I'm initialized")
+print("Env vars successfully initialized")

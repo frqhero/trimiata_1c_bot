@@ -20,6 +20,7 @@ from accept_media import MediaAccept
 from check_sources import CheckSourcesManager
 from cancel_order import CancelOrder
 from stock_equivalence import StockEquivalence
+from media_accept import AcceptMedia
 
 
 def start(update: Update, context: CallbackContext) -> None:
@@ -119,6 +120,14 @@ def cancel_order(update: Update, context: CallbackContext):
     order_id = context.args[0]
     CancelOrder(update, order_id).start()
 
+def accept_media(update: Update, context: CallbackContext):
+    temp_message = update.message.reply_text('Accepting started...')
+    try:
+        AcceptMedia()()
+        temp_message.reply_text('Accepting completed.')
+    except Exception as e:
+        temp_message.reply_text(f'❌❌❌\n{e}')
+
 
 def main():
     load_dotenv(override=True)
@@ -164,6 +173,8 @@ def main():
     dispatcher.add_handler(CommandHandler('resize_photos', resize_photos))
 
     dispatcher.add_handler(CommandHandler('cancel_order', cancel_order))
+
+    dispatcher.add_handler(CommandHandler('accept_media', accept_media))
 
     updater.start_polling()
     updater.idle()
